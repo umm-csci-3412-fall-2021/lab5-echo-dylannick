@@ -6,7 +6,7 @@ class EchoServer{
     public static void main(String[] args){
         try {
 
-            ServerSocket ss = new ServerSocket(3501);//declare a new ServerSocket on port 3500
+            ServerSocket ss = new ServerSocket(3502);//declare a new ServerSocket on port 3500
             Socket socket = ss.accept();  //open the ServerSocket to receive connections
             OutputStream toClient = socket.getOutputStream();
             InputStream fromClient = socket.getInputStream();  //generate an outputstream from the Socket

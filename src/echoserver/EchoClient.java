@@ -7,23 +7,21 @@ import java.util.Scanner;
 class EchoClient{
     public static void main(String[] args){
         try {
-            int b = 0;
             InputStream consoleInput = System.in;
-            Socket socket = new Socket("localhost", 3501);//connect to ServerSocket
+            OutputStream serverOutput = System.out;
 
+            Socket socket = new Socket("localhost", 3502);//connect to ServerSocket
 
+            InputStream fromServer = consoleInput;
+            OutputStream toServer = socket.getOutputStream();
 
-            while(b != 255) {
-                InputStream fromServer = socket.getInputStream();
-                OutputStream toServer = socket.getOutputStream();  //generate InputStream from Socket
+            byte[] bytes = new byte[16 * 1024];
 
-                b = consoleInput.read();
-
-                toServer.write(b);  // Write what we input into the console directly to the server
-                System.out.println(fromServer.read()); // Print the response from the server
+            int count;
+            while ((count = fromServer.read(bytes)) > 0) {
+                serverOutput.write(bytes, 0, count);
             }
 
-            socket.shutdownOutput();
 
         } catch(Exception e){
             System.out.println(e);
