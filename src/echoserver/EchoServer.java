@@ -7,8 +7,8 @@ class EchoServer{
         try {
 
             ServerSocket ss = new ServerSocket(3501);//declare a new ServerSocket on port 3500
-            Socket socket = ss.accept( );  //open the ServerSocket to receive connections
-            OutputStream toClient = socket.getOutputStream( );
+            Socket socket = ss.accept();  //open the ServerSocket to receive connections
+            OutputStream toClient = socket.getOutputStream();
             InputStream fromClient = socket.getInputStream();  //generate an outputstream from the Socket
 
             int b = 0;
@@ -17,7 +17,8 @@ class EchoServer{
                 System.out.println("byte: " + b);
                 toClient.write(b);  //write the array
             }
-            toClient.close();
+
+            toClient.flush();
 
         }catch(Exception e){
              System.out.println(e);
