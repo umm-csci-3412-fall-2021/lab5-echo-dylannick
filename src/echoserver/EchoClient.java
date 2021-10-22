@@ -19,6 +19,7 @@ class EchoClient{
             while(true) {
                 b = consoleInput.read();
                 if(b == -1) {
+                    toServer.flush();
                     socket.shutdownOutput();
                 }
                 toServer.write(b);
@@ -27,7 +28,7 @@ class EchoClient{
 
 
         } catch(Exception e){
-            System.out.println(e);
+            //System.out.println(e);
          }
     }
 }
