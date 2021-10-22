@@ -31,6 +31,12 @@ class EchoClient{
             }
 
             socket.shutdownOutput();
+
+            while ((bytesRead = fromServer.read(buffer)) != -1) {
+                System.out.write(buffer, 0, bytesRead);
+                System.out.flush();
+            }
+
             socket.close();
 
         } catch(Exception e){
