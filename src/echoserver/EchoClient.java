@@ -10,7 +10,7 @@ class EchoClient{
             InputStream consoleInput = System.in;
             OutputStream serverOutput = System.out;
 
-            Socket socket = new Socket("localhost", 3502);//connect to ServerSocket
+            Socket socket = new Socket("localhost", 6013);//connect to ServerSocket
 
             InputStream fromServer = socket.getInputStream();
             OutputStream toServer = socket.getOutputStream();
@@ -21,6 +21,7 @@ class EchoClient{
                 if(b == -1) {
                     toServer.flush();
                     socket.shutdownOutput();
+                    socket.close();
                 }
                 toServer.write(b);
                 serverOutput.write(fromServer.read());
@@ -28,7 +29,7 @@ class EchoClient{
 
 
         } catch(Exception e){
-            //System.out.println(e);
+            System.out.println(e);
          }
     }
 }
