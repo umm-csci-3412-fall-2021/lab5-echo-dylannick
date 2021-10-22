@@ -12,14 +12,17 @@ class EchoClient{
 
             Socket socket = new Socket("localhost", 3502);//connect to ServerSocket
 
-            InputStream fromServer = consoleInput;
+            InputStream fromServer = socket.getInputStream();
             OutputStream toServer = socket.getOutputStream();
 
-            byte[] bytes = new byte[16 * 1024];
-
-            int count;
-            while ((count = fromServer.read(bytes)) > 0) {
-                serverOutput.write(bytes, 0, count);
+            int b = 0;
+            while(true) {
+                b = consoleInput.read();
+                if(b == -1) {
+                    socket.shutdownOutput();
+                }
+                toServer.write(b);
+                serverOutput.write(fromServer.read());
             }
 
 

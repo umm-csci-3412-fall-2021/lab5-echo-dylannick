@@ -4,25 +4,37 @@ import java.io.*;
 
 class EchoServer{
     public static void main(String[] args){
-        try {
+        while(true) {
+            try {
+                ServerSocket ss = new ServerSocket(3502);//declare a new ServerSocket on port 3500
+                Socket socket = null;  //open the ServerSocket to receive connections
+                OutputStream toClient = null;
+                InputStream fromClient = null;
+                int b = 0;
 
-            ServerSocket ss = new ServerSocket(3502);//declare a new ServerSocket on port 3500
-            Socket socket = ss.accept();  //open the ServerSocket to receive connections
-            OutputStream toClient = socket.getOutputStream();
-            InputStream fromClient = socket.getInputStream();  //generate an outputstream from the Socket
+                try {
+                    socket = ss.accept();
+                    toClient = socket.getOutputStream();
+                    fromClient = socket.getInputStream();
+                    b = 0;
+                    System.out.println("Client connected. ");
+                } catch (IOException ex) {
+                    //System.out.println("Can't accept client connection. ");
+                }
 
-            int b = 0;
-            while(b != -1){
-                b = fromClient.read();
-                System.out.println("byte: " + b);
-                toClient.write(b);  //write the array
+
+                while (b != -1) {
+                    b = fromClient.read();
+                    if(b == -1) {
+                        System.out.println("Client disconnected. ");
+                        toClient.flush();
+                    }
+                    toClient.write(b);  //write the array
+                }
+            } catch (Exception e) {
+                // System.out.println(e);
             }
-
-            toClient.flush();
-
-        }catch(Exception e){
-             System.out.println(e);
-         }
+        }
    }
  
 }
