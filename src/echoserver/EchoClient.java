@@ -5,36 +5,33 @@ import java.io.*;
 
 class EchoClient{
     public static void main(String[] args){
+        String hostName;
+        byte[] buffer = new byte[4096];
+        int bytesRead;
+
+        if (args.length == 0) {
+            hostName = "127.0.0.1";
+        } else {
+            hostName = args[0];
+        }
+
         try {
-            String hostName;
-
-            if (args.length == 0) {
-                hostName = "127.0.0.1";
-            } else {
-                hostName = args[0];
-            }
-
-            InputStream consoleInput = System.in;
-            OutputStream serverOutput = System.out;
-
-            Socket socket = new Socket(hostName, 6013);//connect to ServerSocket
+            Socket socket = new Socket(hostName, 6013);
 
             InputStream fromServer = socket.getInputStream();
             OutputStream toServer = socket.getOutputStream();
 
+            while ((bytesRead = System.in.read(buffer)) != -1) {
+                toServer.write(buffer, 0, bytesRead);
+                toServer.flush();
 
-            int b = 0;
-            while(true) {
-                b = consoleInput.read();
-                if(b == -1) {
-                    toServer.flush();
-                    socket.shutdownOutput();
-                    socket.close();
-                }
-                toServer.write(b);
-                serverOutput.write(fromServer.read());
+                bytesRead = fromServer.read(buffer);
+                System.out.write(buffer, 0, bytesRead);
+                System.out.flush();
             }
 
+            socket.shutdownOutput();
+            socket.close();
 
         } catch(Exception e){
             System.out.println(e);
