@@ -13,6 +13,7 @@ class EchoServer{
             int bytesRead;
 
             while(true) {
+                    // Server scans for clients to connect
                     try {
                         socket = ss.accept();
                         toClient = socket.getOutputStream();
@@ -22,12 +23,13 @@ class EchoServer{
                         System.out.println("Can't accept client connection. ");
                     }
 
-
+                    // Client found, continuously write input from it to the buffer and then flush the buffer until EOF
                     while ((bytesRead = fromClient.read(buffer)) != -1) {
                         toClient.write(buffer, 0, bytesRead);
                         toClient.flush();
                     }
 
+                    // EOF received, gracefully shutdown the client connection
                     System.out.println("Client disconnected. ");
                     socket.shutdownOutput();
 
